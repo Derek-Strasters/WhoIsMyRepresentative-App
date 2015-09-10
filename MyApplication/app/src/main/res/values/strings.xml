@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Who Is My Rep Demo</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_section4">Section 4</string>
+    <string name="title_section5">Section 5</string>
+    <string name="title_section6">Section 6</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="popupText">Swipe left or right for different functions.\n (Tap to continue)</string>
+
+    <string name="get_all_member_string">Contact your elected officials!\n
+        Enter your zip-code below\n
+        and tap GO for their contact info</string>
+
 </resources>
