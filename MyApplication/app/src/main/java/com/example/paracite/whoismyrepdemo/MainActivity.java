@@ -5,17 +5,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Locale;
 
-public class MainActivity extends ActionBarActivity {
+import static android.util.Log.wtf;
+
+public class MainActivity extends AppCompatActivity {
 
     /**
      The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -37,8 +38,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        //TODO: Internet connectivity check. Throw popup that exits app on fail.
+
+        // Create the adapter that will return a fragment for each of the five
+        // primary api containing sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -74,7 +77,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
+    /*******************************************Static Inner Classes***************************************************/
     /**
      A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      one of the sections/tabs/pages.
@@ -87,15 +90,27 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 1:
+                    return GetAllMembersFragment.newInstance(position);
+                case 2:
+                    return GetAllRepsByNameFragment.newInstance(position);
+                case 3:
+                    return GetAllRepsByStateFragment.newInstance(position);
+                case 4:
+                    return GetAllSensByNameFragment.newInstance(position);
+                case 5:
+                    return GetAllSensByStateFragment.newInstance(position);
+                default:
+                    wtf("MainActivity.SectionsPagerAdapter.getItem :", "invalid or null position value.");
+                    return null;
+            }
         }
 
         @Override
         public int getCount() {
             // Show 6 total pages.
-            return 6;
+            return 5;
         }
 
         @Override
@@ -112,8 +127,6 @@ public class MainActivity extends ActionBarActivity {
                     return getString(R.string.title_section4).toUpperCase(l);
                 case 4:
                     return getString(R.string.title_section5).toUpperCase(l);
-                case 5:
-                    return getString(R.string.title_section6).toUpperCase(l);
             }
             return null;
         }
@@ -121,41 +134,13 @@ public class MainActivity extends ActionBarActivity {
 
 
 
-    /**
-     A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         The fragment argument representing the section number for this
-         fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         Returns a new instance of this fragment for the given section
-         number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
 
-        public PlaceholderFragment() {
-        }
 
-        @Override
-        public View onCreateView(
-                LayoutInflater inflater,
-                ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView pn = (TextView) findViewById(R.id.page_number);
-            return rootView;
-        }
-    }
+
+
+
+
 
 
 
@@ -163,20 +148,11 @@ public class MainActivity extends ActionBarActivity {
      This fragment returns data on both representatives and senators by zipcode.
      */
     public static class GetAllMembersFragment extends Fragment {
-        /**
-         The fragment argument representing the section number for this
-         fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         Returns a new instance of this fragment for the given section
-         number.
-         */
         public static GetAllMembersFragment newInstance(int sectionNumber) {
             GetAllMembersFragment fragment = new GetAllMembersFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
             fragment.setArguments(args);
             return fragment;
         }
@@ -189,19 +165,175 @@ public class MainActivity extends ActionBarActivity {
                 LayoutInflater inflater,
                 ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_get_all_members, container, false);
 
-            return rootView;
+            return inflater.inflate(R.layout.frag_get_all_members, container, false);
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     This fragment returns data on representatives by last name.
+     */
+    public static class GetAllRepsByNameFragment extends Fragment {
+
+        public static GetAllRepsByNameFragment newInstance(int sectionNumber) {
+            GetAllRepsByNameFragment fragment = new GetAllRepsByNameFragment();
+            Bundle args = new Bundle();
+            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public GetAllRepsByNameFragment() {
+        }
+
+        @Override
+        public View onCreateView(
+                LayoutInflater inflater,
+                ViewGroup container,
+                Bundle savedInstanceState) {
+
+            return inflater.inflate(R.layout.frag_get_all_reps_name, container, false);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     This fragment returns data on representatives by state.
+     */
+    public static class GetAllRepsByStateFragment extends Fragment {
+
+        public static GetAllRepsByStateFragment newInstance(int sectionNumber) {
+            GetAllRepsByStateFragment fragment = new GetAllRepsByStateFragment();
+            Bundle args = new Bundle();
+            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public GetAllRepsByStateFragment() {
+        }
+
+        @Override
+        public View onCreateView(
+                LayoutInflater inflater,
+                ViewGroup container,
+                Bundle savedInstanceState) {
+
+            return inflater.inflate(R.layout.frag_get_all_reps_state, container, false);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     This fragment returns data on senators by last name.
+     */
+    public static class GetAllSensByNameFragment extends Fragment {
+
+        public static GetAllSensByNameFragment newInstance(int sectionNumber) {
+            GetAllSensByNameFragment fragment = new GetAllSensByNameFragment();
+            Bundle args = new Bundle();
+            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public GetAllSensByNameFragment() {
+        }
+
+        @Override
+        public View onCreateView(
+                LayoutInflater inflater,
+                ViewGroup container,
+                Bundle savedInstanceState) {
+
+            return inflater.inflate(R.layout.frag_get_all_sens_name, container, false);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     This fragment returns data on senators by state.
+     */
+    public static class GetAllSensByStateFragment extends Fragment {
+
+        public static GetAllMembersFragment newInstance(int sectionNumber) {
+            GetAllMembersFragment fragment = new GetAllMembersFragment();
+            Bundle args = new Bundle();
+            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public GetAllSensByStateFragment() {
+        }
+
+        @Override
+        public View onCreateView(
+                LayoutInflater inflater,
+                ViewGroup container,
+                Bundle savedInstanceState) {
+
+            return inflater.inflate(R.layout.frag_get_all_sens_state, container, false);
+        }
+    }
 }
-
-
-
-
-
-
 
 
 

@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.paracite.whoismyrepdemo" >
 
+    <!-- This app is uses the Android Support Library -->
+    <uses-sdk
+    android:minSdkVersion="7"
+    android:targetSdkVersion="23"/>
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- TODO: don't forget to remove debug allowed -->

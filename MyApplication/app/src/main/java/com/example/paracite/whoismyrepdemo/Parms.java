@@ -8,5 +8,6 @@ package com.example.paracite.whoismyrepdemo;
 public class Parms {
 
  public static final String PREFS = "WIMRD-Preference-File.dat";
+ public static final String ARG_SEC_NUM = "section_number";
 
 }
