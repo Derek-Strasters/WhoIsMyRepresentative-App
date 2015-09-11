@@ -11,10 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.Locale;
-
-import static android.util.Log.wtf;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     The {@link ViewPager} that will host the section contents.
-     */
+    // The {@link ViewPager} that will host the section contents.
     ViewPager mViewPager;
+
+    /**************************************************Overrides******************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +41,14 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Internet connectivity check. Throw popup that exits app on fail.
 
         // Create the adapter that will return a fragment for each of the five
-        // primary api containing sections of the activity.
+        // primary api-containing sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        //TODO: Make first time run, usage hint, popup.
 
     }
 
@@ -64,17 +66,21 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //TODO: Create settings activity
             return true;
         }
 
-        if (id == R.id.item1) {
+        if (id == R.id.reinit) {
+            //TODO: Resets any "hasRunOnce" persistent values
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
 
     /*******************************************Static Inner Classes***************************************************/
@@ -90,19 +96,19 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
+            int natural_pos = position + 1;
+            switch (natural_pos) {
                 case 1:
-                    return GetAllMembersFragment.newInstance(position);
+                    return GetAllMembersFragment.newInstance(natural_pos);
                 case 2:
-                    return GetAllRepsByNameFragment.newInstance(position);
+                    return GetAllRepsByNameFragment.newInstance(natural_pos);
                 case 3:
-                    return GetAllRepsByStateFragment.newInstance(position);
+                    return GetAllRepsByStateFragment.newInstance(natural_pos);
                 case 4:
-                    return GetAllSensByNameFragment.newInstance(position);
+                    return GetAllSensByNameFragment.newInstance(natural_pos);
                 case 5:
-                    return GetAllSensByStateFragment.newInstance(position);
+                    return GetAllSensByStateFragment.newInstance(natural_pos);
                 default:
-                    wtf("MainActivity.SectionsPagerAdapter.getItem :", "invalid or null position value.");
                     return null;
             }
         }
@@ -130,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
+
     }
 
 
@@ -141,13 +148,28 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    //private void initViews() {
+    //    buttonRepN = (Button)   findViewById(R.id.button_get_all_reps_name);
+    //    buttonRepS = (Button)   findViewById(R.id.button_get_all_reps_state);
+    //    buttonSenN = (Button)   findViewById(R.id.button_get_all_sens_name);
+    //    buttonSenS = (Button)   findViewById(R.id.button_get_all_sens_state);
+    //    editMem    = (EditText) findViewById(R.id.in_get_all_members_zip);
+    //    editRepn   = (EditText) findViewById(R.id.in_get_all_reps_name);
+    //    editReps   = (EditText) findViewById(R.id.in_get_all_reps_state);
+    //    editSenN   = (EditText) findViewById(R.id.in_get_all_sens_name);
+    //    editSenS   = (EditText) findViewById(R.id.in_get_all_sens_state);
+    //}
 
 
 
     /**
      This fragment returns data on both representatives and senators by zipcode.
      */
-    public static class GetAllMembersFragment extends Fragment {
+    public static class GetAllMembersFragment extends Fragment implements View.OnClickListener {
+
+        Button buttonMem;
+        EditText editMem;
+        View rootView;
 
         public static GetAllMembersFragment newInstance(int sectionNumber) {
             GetAllMembersFragment fragment = new GetAllMembersFragment();
@@ -165,8 +187,24 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater inflater,
                 ViewGroup container,
                 Bundle savedInstanceState) {
+            rootView = inflater.inflate(R.layout.frag_get_all_members, container, false);
 
-            return inflater.inflate(R.layout.frag_get_all_members, container, false);
+            buttonMem  = (Button)   rootView.findViewById(R.id.button_get_all_members_zip);
+            buttonMem.setOnClickListener(this);
+
+            editMem    = (EditText) rootView.findViewById(R.id.in_get_all_members_zip);
+
+
+            //TODO: Make popup that informs of rejected data entry (invalid entry)
+
+            return rootView;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.button_get_all_members_zip) {
+                JsonUtilities.startJsonRequest(v.getContext(), Parms.MEM_BY_ZIP_BASE_URL, editMem.getText().toString());
+            }
         }
     }
 
@@ -313,8 +351,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public static class GetAllSensByStateFragment extends Fragment {
 
-        public static GetAllMembersFragment newInstance(int sectionNumber) {
-            GetAllMembersFragment fragment = new GetAllMembersFragment();
+        public static GetAllSensByStateFragment newInstance(int sectionNumber) {
+            GetAllSensByStateFragment fragment = new GetAllSensByStateFragment();
             Bundle args = new Bundle();
             args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
             fragment.setArguments(args);
