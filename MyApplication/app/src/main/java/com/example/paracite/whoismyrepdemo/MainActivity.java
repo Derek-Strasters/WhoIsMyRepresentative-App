@@ -1,11 +1,13 @@
 package com.example.paracite.whoismyrepdemo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Locale;
 
@@ -89,8 +92,11 @@ public class MainActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        Context parentContext;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            this.parentContext = parentContext;
         }
 
         @Override
@@ -141,13 +147,12 @@ public class MainActivity extends AppCompatActivity {
 
     // ****** In this stage of development this is the most completed fragment for use in debugging.
 
-/*******************    This fragment returns data on both representatives and senators by zipcode.     ***************/
+/*******************    This fragment returns data on both representatives and senators by zipcode.     **************/
     public static class GetAllMembersFragment extends Fragment implements View.OnClickListener {
 
-        private Button buttonMem;
-        private EditText editMem;
+        private Button goButt;
+        private EditText textBody;
         private View rootView;
-        private AsyncJsonGrab jGrabber;
 
         public static GetAllMembersFragment newInstance(int sectionNumber) {
             GetAllMembersFragment fragment = new GetAllMembersFragment();
@@ -155,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
             fragment.setArguments(args);
 
-            fragment.jGrabber = new AsyncJsonGrab(fragment.getContext().getApplicationContext());
             return fragment;
         }
 
@@ -169,10 +173,41 @@ public class MainActivity extends AppCompatActivity {
                 Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.frag_get_all_members, container, false);
 
-            buttonMem = (Button) rootView.findViewById(R.id.button_get_all_members_zip);
-            buttonMem.setOnClickListener(this);
 
-            editMem = (EditText) rootView.findViewById(R.id.in_get_all_members_zip);
+
+
+
+
+
+            //------------------------------------------------------------- NEEDS REFLECTION
+            //TODO: the following couple of lines are a test for reflection to necessitate only one static inner.
+            //TODO: (Cont.) The 'needs to be done' item here is finishing the implementation of reflection.
+
+            //This string will become a field and be set during instantiation.
+            String nameOfFrag = "all_members_zip";
+
+            try {
+                Field buttonIdField = R.id.class.getDeclaredField("button_get_".concat(nameOfFrag));
+                goButt = (Button) rootView.findViewById(buttonIdField.getInt(null));
+            } catch (NoSuchFieldException e) {
+                Log.e("Frag Reflection","no such resource name found");
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                Log.e("Frag Reflection", "Illegal Access");
+            }
+            //------------------------------------------------------------------------
+
+
+
+
+
+
+            goButt.setOnClickListener(this);
+
+            textBody = (EditText) rootView.findViewById(R.id.in_get_all_members_zip);
+
+            //FIXME: BIG OLD FIX ME, this is where the effing error is happening.
 
             //TODO: Make popup that informs of rejected data entry (invalid entry)
 
@@ -186,9 +221,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //TODO: Add input validation here
 
-                URL url = JsonUtilities.formURLforGrab(Parms.MEM_BY_ZIP_BASE_URL, editMem.getText().toString());
+                URL url = JsonUtilities.formURLforGrab(Parms.MEM_BY_ZIP_BASE_URL, textBody.getText().toString());
 
-                jGrabber.execute(url);
+                new AsyncJsonGrab(this.getContext()).execute(url);
             }
         }
     }

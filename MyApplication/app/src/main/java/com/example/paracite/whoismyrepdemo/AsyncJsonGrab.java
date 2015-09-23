@@ -45,7 +45,7 @@ public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
         JSONObject jData = null;
 
         try {
-            // forming th java.net.URL object
+            // forming the java.net.URL object
             urlConnection = (HttpURLConnection) params[0].openConnection();
 
             // optional request header
@@ -59,25 +59,30 @@ public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
             int statusCode = urlConnection.getResponseCode();
 
             // 200 represents HTTP OK
+            //TODO: implement other error codes here.
             if (statusCode == 200) {
                 inputStream = new BufferedInputStream(urlConnection.getInputStream());
                 jData = new JSONObject(JsonUtilities.convertInputStreamToString(inputStream));
                 inputStream.close();
             } else {
                 //TODO: Instantiate popup dialogue to inform user of connectivity problem
+                //TODO: first initiate a handful of retry attempts
             }
         } catch (Exception e) {
             //FIXME: hardcoded string
             Log.d("JsonUtilities", e.getLocalizedMessage());
             return null;
+        } finally {
+            urlConnection.disconnect();
         }
 
-        // A delay, this adds to the user experience of "things" happening behind the scenes.
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // A delay, to ensure the user experience of "things" happening behind the scenes.
+        // TODO: reimplement using a check in the difference in system time
+        //try {
+        //    Thread.sleep(2000);
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
 
         return jData;
         //TODO: Add timeout timer?
@@ -90,7 +95,7 @@ public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
         if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
 
-        if (jData.has("name")) { //Success
+        if (jData.has("results")) { //Success
 
             String readable = JsonUtilities.parseResult(jData);
 
@@ -100,7 +105,8 @@ public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
             Intent i = new Intent(context, ResultActivity.class);
             i.putExtra(Parms.RSLT_MSG, readable);
             context.startActivity(i);
-        }
+        } //TODO: else popup of problem (what kind of problems could this be? corrupt data?).
+        //TODO: Attempt retry's first, depending on the nature of the code.
     }
 
 }

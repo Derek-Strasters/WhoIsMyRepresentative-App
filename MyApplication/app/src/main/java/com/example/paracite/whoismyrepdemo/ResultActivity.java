@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ResultActivity extends AppCompatActivity {
@@ -15,8 +17,18 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
 
         Intent i = getIntent();
+
+        Button exitButt = (Button) findViewById(R.id.exit_button);
+
         TextView textView = (TextView) findViewById(R.id.result_text);
         textView.setText(i.getStringExtra(Parms.RSLT_MSG));
+
+        exitButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
