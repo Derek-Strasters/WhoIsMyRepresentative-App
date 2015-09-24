@@ -8,12 +8,16 @@
     <string name="title_section4">Senitors by Name</string>
     <string name="title_section5">Senitors by State</string>
 
+    <!-- These are the names used for -->
+
+
+
     <string name="hello_world">Hello world!</string>
 
     <string name="action_settings">Settings</string>
-    <string name="popupText">Swipe left or right for different functions.\n (Tap to continue)</string>
+    <string name="popupText_01">Swipe left or right for different functions.\n (Tap to continue)</string>
 
-    <string name="string_get_all_member_zip">Contact your elected officials!\nenter your zip-code below\nand tap GO for all your\nrepresentatives\' contact info</string>
+    <string name="string_get_by_zip">Contact your elected officials!\nenter your zip-code below\nand tap GO for all your\nrepresentatives\' contact info</string>
     <string name="string_get_all_reps_name">Contact a House Representave!\nenter a House Rep\'s last name\nand then tap GO for all of\ntheir contact info</string>
     <string name="string_get_all_reps_state">Contact your House Representatives!\nenter your state abbreviation\nand tap GO for all of\ntheir contact info</string>
     <string name="string_get_all_sens_name">Contact a Senator!\nenter a Senators last name\nand tap GO for all of\ntheir contact info</string>
@@ -22,11 +26,9 @@
 
 
 
-
-
-
-
     <string name="text_placeholder">You should not see this text, please report.</string>
     <string name="title_activity_result">ResultActivity</string>
+    <string name="go_ime">GO!</string>
+    <string name="hint_get_by_zip">Enter Zip Code</string>
 
 </resources>

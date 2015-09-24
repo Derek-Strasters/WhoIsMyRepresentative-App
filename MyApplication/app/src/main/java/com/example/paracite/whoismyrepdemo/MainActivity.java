@@ -1,6 +1,7 @@
 package com.example.paracite.whoismyrepdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,13 +9,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -35,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
     // The {@link ViewPager} that will host the section contents.
     ViewPager mViewPager;
 
-/**************************************************  Overrides   ******************************************************/
+    /**************************************************
+     Overrides
+     ******************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
 /*******************************************  Static Inner Classes  ***************************************************/
 
-
     /**
      A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      one of the sections/tabs/pages.
@@ -102,20 +107,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             int natural_pos = position + 1;
-            switch (natural_pos) {
-                case 1:
-                    return GetAllMembersFragment.newInstance(natural_pos);
-                case 2:
-                    return GetAllRepsByNameFragment.newInstance(natural_pos);
-                case 3:
-                    return GetAllRepsByStateFragment.newInstance(natural_pos);
-                case 4:
-                    return GetAllSensByNameFragment.newInstance(natural_pos);
-                case 5:
-                    return GetAllSensByStateFragment.newInstance(natural_pos);
-                default:
-                    return null;
-            }
+            return GetReps.newInstance(natural_pos);
         }
 
         @Override
@@ -144,26 +136,49 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     // ****** In this stage of development this is the most completed fragment for use in debugging.
 
-/*******************    This fragment returns data on both representatives and senators by zipcode.     **************/
-    public static class GetAllMembersFragment extends Fragment implements View.OnClickListener {
+    /*******************
+     This fragment returns data on both representatives and senators by zip code.
+     *************/
+    public static class GetReps
+            extends Fragment
+            implements View.OnClickListener,
+            EditText.OnEditorActionListener,
+            JsonGrabListener {
+
+        // Name to be used with reflection to get appropriate xml resource.
+        private String fragSufx;
 
         private Button goButt;
-        private EditText textBody;
+        private EditText editBox;
+        private TextView textBody;
         private View rootView;
 
-        public static GetAllMembersFragment newInstance(int sectionNumber) {
-            GetAllMembersFragment fragment = new GetAllMembersFragment();
+        public static GetReps newInstance(int sectionNumber) {
+            GetReps fragment = new GetReps();
             Bundle args = new Bundle();
-            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
+            args.putInt(Consts.ARG_SEC_NUM, sectionNumber);
             fragment.setArguments(args);
+
+            //TODO: fragSufx finish defining
+
+            switch (sectionNumber) {
+                case 1:
+                    fragment.setFragSufx("get_by_zip");
+                    //TODO: set text entry validation type here. (create method)
+                    break;
+                case 2:
+                    fragment.setFragSufx("get_all_reps_name");
+                    break;
+                default:
+                    fragment.setFragSufx("get_all_reps_state");
+            }
 
             return fragment;
         }
 
-        public GetAllMembersFragment() {
+        public GetReps() {  // Stuberta (Not needed)
         }
 
         @Override
@@ -171,162 +186,88 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater inflater,
                 ViewGroup container,
                 Bundle savedInstanceState) {
-            rootView = inflater.inflate(R.layout.frag_get_all_members, container, false);
-
-
-
-
-
-
 
             //------------------------------------------------------------- NEEDS REFLECTION
-            //TODO: the following couple of lines are a test for reflection to necessitate only one static inner.
-            //TODO: (Cont.) The 'needs to be done' item here is finishing the implementation of reflection.
 
-            //This string will become a field and be set during instantiation.
-            String nameOfFrag = "all_members_zip";
+            // This string will become a field and be set during instantiation by a parameter.
 
             try {
-                Field buttonIdField = R.id.class.getDeclaredField("button_get_".concat(nameOfFrag));
+
+                Field buttonIdField = R.id.class.getField("button_".concat(fragSufx));
+                Field textIdField = R.id.class.getField("textView_".concat(fragSufx));
+                Field editTextField = R.id.class.getField("in_".concat(fragSufx));
+                Field stringField = R.string.class.getField("string_".concat(fragSufx));
+                Field viewField = R.layout.class.getField("frag_".concat(fragSufx));
+
+                rootView = inflater.inflate(viewField.getInt(null), container, false);
+
                 goButt = (Button) rootView.findViewById(buttonIdField.getInt(null));
+                goButt.setOnClickListener(this);
+
+                textBody = (TextView) rootView.findViewById(textIdField.getInt(null));
+                textBody.setText(getString(stringField.getInt(null)));
+
+                editBox = (EditText) rootView.findViewById(editTextField.getInt(null));
+                editBox.setOnEditorActionListener(this);
+
             } catch (NoSuchFieldException e) {
-                Log.e("Frag Reflection","no such resource name found");
+                Log.e("Frag Reflection", "no such resource name found");
                 e.printStackTrace();
+                throw new RuntimeException("Reflection error, resource name not found");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-                Log.e("Frag Reflection", "Illegal Access");
+                Log.wtf("Frag Reflection", "Illegal Access, this error should never happen. Check resource spelling");
             }
             //------------------------------------------------------------------------
-
-
-
-
-
-
-            goButt.setOnClickListener(this);
-
-            textBody = (EditText) rootView.findViewById(R.id.in_get_all_members_zip);
-
-            //FIXME: BIG OLD FIX ME, this is where the effing error is happening.
 
             //TODO: Make popup that informs of rejected data entry (invalid entry)
 
             return rootView;
         }
 
+        private void startJsonGrab() {
+            URL url = JsonUtilities.formURLforGrab(Consts.MEM_BY_ZIP_BASE_URL, editBox.getText().toString());
+            new AsyncJsonGrab(this.getContext(), this).execute(url);
+        }
+
+        /**************************************
+         LISTENERS
+         ********************************/
+
         //TODO: Change function of keyboard return to simulate "OK" button press
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.button_get_all_members_zip) {
+            if (v.getId() == R.id.button_get_by_zip) {
 
                 //TODO: Add input validation here
-
-                URL url = JsonUtilities.formURLforGrab(Parms.MEM_BY_ZIP_BASE_URL, textBody.getText().toString());
-
-                new AsyncJsonGrab(this.getContext()).execute(url);
+                startJsonGrab();
             }
         }
-    }
 
-/**********************    This fragment returns data on representatives by last name.  *******************************/
-    public static class GetAllRepsByNameFragment extends Fragment {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_GO /* &&TODO: validation */) {
+                startJsonGrab();
+            }
 
-        public static GetAllRepsByNameFragment newInstance(int sectionNumber) {
-            GetAllRepsByNameFragment fragment = new GetAllRepsByNameFragment();
-            Bundle args = new Bundle();
-            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public GetAllRepsByNameFragment() {
+            return false;
         }
 
         @Override
-        public View onCreateView(
-                LayoutInflater inflater,
-                ViewGroup container,
-                Bundle savedInstanceState) {
+        public void onJsonGrabComplete(Representative[] reps) {
+            // Start result activity
+            Intent i = new Intent(this.getContext(), ResultActivity.class);
+            i.putExtra(Consts.RSLT_REPS, reps);
+            startActivity(i);
+        }
 
-            return inflater.inflate(R.layout.frag_get_all_reps_name, container, false);
+        /********************************
+         SETTERS
+         ****************************/
+        public void setFragSufx(String fgmtSufx) {
+            this.fragSufx = fgmtSufx;
         }
     }
-
-/**********************    This fragment returns data on representatives by state.    *********************************/
-    public static class GetAllRepsByStateFragment extends Fragment {
-
-        public static GetAllRepsByStateFragment newInstance(int sectionNumber) {
-            GetAllRepsByStateFragment fragment = new GetAllRepsByStateFragment();
-            Bundle args = new Bundle();
-            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public GetAllRepsByStateFragment() {
-        }
-
-        @Override
-        public View onCreateView(
-                LayoutInflater inflater,
-                ViewGroup container,
-                Bundle savedInstanceState) {
-
-            return inflater.inflate(R.layout.frag_get_all_reps_state, container, false);
-        }
-    }
-
-/**********************    This fragment returns data on senators by last name.     ***********************************/
-    public static class GetAllSensByNameFragment extends Fragment {
-
-        public static GetAllSensByNameFragment newInstance(int sectionNumber) {
-            GetAllSensByNameFragment fragment = new GetAllSensByNameFragment();
-            Bundle args = new Bundle();
-            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public GetAllSensByNameFragment() {
-        }
-
-        @Override
-        public View onCreateView(
-                LayoutInflater inflater,
-                ViewGroup container,
-                Bundle savedInstanceState) {
-
-            return inflater.inflate(R.layout.frag_get_all_sens_name, container, false);
-        }
-    }
-
-/**********************    This fragment returns data on senators by state.     ***************************************/
-    public static class GetAllSensByStateFragment extends Fragment {
-
-        public static GetAllSensByStateFragment newInstance(int sectionNumber) {
-            GetAllSensByStateFragment fragment = new GetAllSensByStateFragment();
-            Bundle args = new Bundle();
-            args.putInt(Parms.ARG_SEC_NUM, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public GetAllSensByStateFragment() {
-        }
-
-        @Override
-        public View onCreateView(
-                LayoutInflater inflater,
-                ViewGroup container,
-                Bundle savedInstanceState) {
-
-            return inflater.inflate(R.layout.frag_get_all_sens_state, container, false);
-        }
-    }
-
-/*******************************************    JSON and web     ******************************************************/
-
-
 }
 
 

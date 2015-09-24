@@ -6,28 +6,31 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.example.paracite.whoismyrepdemo.MainActivity$GetAllMembersFragment">
+                tools:context="com.example.paracite.whoismyrepdemo.MainActivity.GetRepsByZip">
     <EditText
-        android:id="@+id/in_get_all_members_zip"
+        android:id="@+id/in_get_by_zip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:digits="0123456789"
         android:editable="true"
         android:ems="10"
-        android:inputType="number"
+        android:numeric="integer"
+        android:inputType="phone"
         android:paddingTop="30dp"
+        android:hint="@string/hint_get_by_zip"
+        android:imeOptions="actionGo"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="30dp"/>
 
     <TextView
-        android:id="@+id/textView_get_all_members_zip"
+        android:id="@+id/textView_get_by_zip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="22dp"
-        android:text="@string/string_get_all_member_zip"
+        android:text="@string/text_placeholder"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_alignParentTop="true"
@@ -37,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GO"
-        android:id="@+id/button_get_all_members_zip"
+        android:id="@+id/button_get_by_zip"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 

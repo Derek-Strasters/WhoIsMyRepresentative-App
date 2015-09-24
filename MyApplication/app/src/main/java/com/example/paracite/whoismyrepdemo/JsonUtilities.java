@@ -10,50 +10,35 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
 
 /**
  Created by paracite on 9/10/15.
  */
 public class JsonUtilities {
 
+    // Create Representative objects from JSON, separated by new line character for display in a textView or similar.
+    public static Representative[] parseRepResult(JSONObject result) {
 
-
-
-    // Create human readable string, separated by new line character for display in a textView or similar.
-    public static String parseResult(JSONObject result) {
-
-        String readable = "";
-        String[] persons;
+        Representative[] Reps = null;
         JSONArray jArray = null;
 
         try {
             jArray = result.getJSONArray("results");
 
+            Reps = new Representative[jArray.length()];
+
             //TODO: break out each representative into their own swipe-able fragment.
             // Iterate through all data contained in all entries, each being concatenated to a new line.
+
+            // Deposit the JSON data as representative objects.
             for (int i=0; i< jArray.length();i++ ) {
-                JSONObject jPerson = jArray.getJSONObject(i);
-                Iterator<String> personItr = jPerson.keys();
-                String person = "";
-
-                //TODO: add very careful validation here.
-                while(personItr.hasNext()){
-                    String nextKey = personItr.next();
-                    person = person.concat(nextKey.substring(0,1).toUpperCase()).concat(nextKey.substring(1));
-                    person = person.concat("    ").concat(jPerson.getString(nextKey)).concat("\n");
-                }
-
-                readable = readable.concat(person).concat("\n");
+                Reps[i] = new Representative(jArray.getJSONObject(i));
             }
-
-            persons = new String[jArray.length()];
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return readable;
+        return Reps;
     }
 
     // Forms a usable URL with the JSON flag appended.
@@ -61,7 +46,7 @@ public class JsonUtilities {
 
         URL requestURL = null;
         try {
-            requestURL = new URL(baseURL.concat(validatedString).concat(Parms.JSON_SUFIX));
+            requestURL = new URL(baseURL.concat(validatedString).concat(Consts.JSON_SUFIX));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             //TODO: Add error logging to record URL validation failure

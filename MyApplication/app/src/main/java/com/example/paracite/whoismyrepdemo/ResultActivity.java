@@ -11,17 +11,22 @@ import android.widget.TextView;
 
 public class ResultActivity extends AppCompatActivity {
 
+    Representative[] reps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
         Intent i = getIntent();
+        reps = (Representative[]) i.getParcelableArrayExtra(Consts.RSLT_REPS);
 
         Button exitButt = (Button) findViewById(R.id.exit_button);
 
+
+        //TODO: change from test to live version
         TextView textView = (TextView) findViewById(R.id.result_text);
-        textView.setText(i.getStringExtra(Parms.RSLT_MSG));
+        textView.setText(reps[0].getName());
 
         exitButt.setOnClickListener(new View.OnClickListener() {
             @Override
