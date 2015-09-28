@@ -1,16 +1,15 @@
 <resources>
-    <string name="app_name">Who Is My Rep Demo</string>
-    <string name="title_activity_main">Who\'s my rep?</string>
+    <string name="app_name">Who Is Representing Me?</string>
+    <string name="title_activity_main">Who\'s Representing Me?</string>
+    <string name="title_activity_result">Results for </string>
 
-    <string name="title_section1">The Elected in Your Area</string>
+    <string name="title_section1">The Representation in Your Area</string>
     <string name="title_section2">House by Name</string>
     <string name="title_section3">House by State</string>
     <string name="title_section4">Senitors by Name</string>
     <string name="title_section5">Senitors by State</string>
 
-    <!-- These are the names used for -->
-
-
+    <!-- These are the names used for ... TODO: finish this sentence-->
 
     <string name="hello_world">Hello world!</string>
 
@@ -23,12 +22,16 @@
     <string name="string_get_all_sens_name">Contact a Senator!\nenter a Senators last name\nand tap GO for all of\ntheir contact info</string>
     <string name="string_get_all_sens_state">Contact your Senator!\nenter your state abbreviation\nand tap GO for all of\ntheir contact info</string>
 
+    <string name="ime_go">GO!</string>
 
-
-
-    <string name="text_placeholder">You should not see this text, please report.</string>
-    <string name="title_activity_result">ResultActivity</string>
-    <string name="go_ime">GO!</string>
+    <string name="generic_text_placeholder">You should not see this text, please report.</string>
     <string name="hint_get_by_zip">Enter Zip Code</string>
+    <string name="rep_name_place_holder">Firstname Lastname</string>
+    <string name="office_place_holder">A potentially really long name and address of the office location</string>
+    <string name="state_name_place_holder">A US State With A Long Name</string>
+    <string name="district_place_holder">A District or Title</string>
+    <string name="page_number_placeholder">Page Number</string>
+    <string name="button_last_image">&lt;</string>
+    <string name="button_next_image">&gt;</string>
 
 </resources>

@@ -1,0 +1,125 @@
+<!--TODO: Perhaps tidy up the naming convention between the java and XML I.E. fragment names-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context="com.example.paracite.whoismyrepdemo.ResultActivity.RepInfoPage"
+    >
+
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="DONE"
+        />
+
+    <Button
+        android:id="@+id/call_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/exit_button"
+        android:layout_toLeftOf="@+id/exit_button"
+        android:layout_toStartOf="@+id/exit_button"
+        android:text="Call"/>
+
+    <Button
+        android:id="@+id/web_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/exit_button"
+        android:layout_toEndOf="@+id/exit_button"
+        android:layout_toRightOf="@+id/exit_button"
+        android:text="Web"/>
+
+    <TextView
+        android:id="@+id/rep_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/rep_name_place_holder"
+        android:textIsSelectable="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_below="@+id/page_number"/>
+
+    <ViewFlipper
+        android:id="@+id/rep_images"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/state_name"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="false"
+        android:layout_below="@+id/rep_name"
+        android:autoStart="false"
+        android:flipInterval="8411"/>
+
+    <TextView
+        android:id="@+id/office_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/exit_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/office_place_holder"/>
+
+    <TextView
+        android:id="@+id/state_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/district"
+        android:layout_centerHorizontal="true"
+        android:text="@string/state_name_place_holder"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
+        android:id="@+id/district"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/office_location"
+        android:layout_centerHorizontal="true"
+        android:text="@string/district_place_holder"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/page_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/page_number_placeholder"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:id="@+id/last_image"
+        style="@style/Widget.AppCompat.Light.ActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rep_images"
+        android:layout_alignStart="@+id/rep_images"
+        android:text="@string/button_last_image"
+        android:layout_centerVertical="true"
+        android:textSize="80dp"/>
+
+    <Button
+        android:id="@+id/next_image"
+        style="@style/Widget.AppCompat.Light.ActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/rep_images"
+        android:layout_alignRight="@+id/rep_images"
+        android:text="@string/button_next_image"
+        android:layout_centerVertical="true"
+        android:textSize="80dp"/>
+
+</RelativeLayout>

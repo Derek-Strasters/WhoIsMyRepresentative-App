@@ -15,15 +15,15 @@ import java.net.URL;
 /**
  Created by paracite on 9/15/15.
  */
-public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
+public class AsyncRepJsonGrab extends AsyncTask<URL, Void, JSONObject> {
     // This class pulls JSON from the API asyncronously while also placing a spinner on the UI to notify the user
 
-    JsonGrabListener jsonGrabListener;
+    RepJsonGrabListener repJsonGrabListener;
     ProgressDialog progressDialog;
     Context context;
 
-    public AsyncJsonGrab(Context context, JsonGrabListener jsonGrabListener) {
-        this.jsonGrabListener = jsonGrabListener;
+    public AsyncRepJsonGrab(Context context, RepJsonGrabListener repJsonGrabListener) {
+        this.repJsonGrabListener = repJsonGrabListener;
         this.context = context;
         progressDialog = new ProgressDialog(context);
     }
@@ -31,8 +31,8 @@ public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog.setTitle(Consts.DIAG_TITLE);
-        progressDialog.setMessage(Consts.DIAG_MSG);
+        progressDialog.setTitle(Con.Dlg.TITLE);
+        progressDialog.setMessage(Con.Dlg.MSG);
         progressDialog.show();
     }
 
@@ -61,23 +61,24 @@ public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
                 //TODO: implement other error codes here.
                 if (statusCode == 200) {
 
-                    //TODO: implement data verification by getting JSON twice and comparing.
-                    //Side thought on the compare verification.  We could implement a difference checking
-                    //  method that is called upon getting a failure from the direct compare check that would
-                    //  start logging the results from many get attempts assign each char in the results a
-                    //  confidence value and would check the total result string length's std. deviation.
-                    //  Repeating the request until the std. dev. drops below a certain threshold deemed
-                    //  acceptable, or a max retry number is reached.  Overkill here, but would be useful in
-                    //  any kind of financial or banking software.
+                    /*
+                    TODO: implement data verification by getting JSON twice and comparing.
+                    Side thought on the compare verification.  We could implement a difference checking
+                    method that is called upon getting a failure from the direct compare check that would
+                    start logging the results from many get attempts assign each char in the results a
+                    confidence value and would check the total result string length's std. deviation.
+                    Repeating the request until the std. dev. drops below a certain threshold deemed
+                    acceptable, or a max retry number is reached.  Overkill here, but would be useful in
+                    any kind of financial or banking software.
+                    */
 
                     inputStream = new BufferedInputStream(urlConnection.getInputStream());
-                    jData = new JSONObject(JsonUtilities.convertInputStreamToString(inputStream));
+                    jData = JsonUtilities.convertInputStreamToString(inputStream);
                     inputStream.close();
 
                     break;
                 } else {
                     //TODO: Instantiate popup dialogue to inform user of connectivity problem
-                    //TODO:
                 }
             } while (statusCode != 200 && retrys < 10);
 
@@ -114,7 +115,7 @@ public class AsyncJsonGrab extends AsyncTask<URL, Void, JSONObject> {
             if (jData.has("results")) { //Success
                 Representative[] reps = JsonUtilities.parseRepResult(jData);
                 //TODO: Some kind of assertion that reps succeeded?
-                jsonGrabListener.onJsonGrabComplete(reps);
+                repJsonGrabListener.onRepJsonGrabComplete(reps);
             }
         }//TODO: else popup of problem (what kind of problems could this be? corrupt data?).
         //TODO: Attempt retry's first, depending on the nature of the code.
