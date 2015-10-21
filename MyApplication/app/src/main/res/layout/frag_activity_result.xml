@@ -1,5 +1,7 @@
 <!--TODO: Perhaps tidy up the naming convention between the java and XML I.E. fragment names-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/result_relative_layout"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/com.example.paracite.whoismyrepdemo"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -7,8 +9,7 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="com.example.paracite.whoismyrepdemo.ResultActivity.RepInfoPage"
-    >
+                tools:context="com.example.paracite.whoismyrepdemo.ResultActivity.RepInfoPage">
 
     <Button
         android:id="@+id/exit_button"
@@ -23,7 +24,6 @@
         android:id="@+id/call_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/exit_button"
@@ -35,7 +35,6 @@
         android:id="@+id/web_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/exit_button"
@@ -47,22 +46,43 @@
         android:id="@+id/rep_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/page_number"
         android:layout_centerHorizontal="true"
         android:text="@string/rep_name_place_holder"
-        android:textIsSelectable="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:layout_below="@+id/page_number"/>
+        android:textIsSelectable="false"/>
 
-    <ViewFlipper
+    <com.example.paracite.whoismyrepdemo.RepImageFlipper
+        android:id="@+id/rep_image_flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/state_name"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/rep_name"
+        app:placeholder="@drawable/us_seal">
+    </com.example.paracite.whoismyrepdemo.RepImageFlipper>
+
+    <!--
+    <AdapterViewFlipper
         android:id="@+id/rep_images"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/state_name"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="false"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/rep_name"
-        android:autoStart="false"
-        android:flipInterval="8411"/>
+        android:animateFirstView="false"
+        android:animateLayoutChanges="false"
+        android:autoStart="true"
+        android:flipInterval="8411"
+        android:padding="40dp">
+    </AdapterViewFlipper>
+-->
 
     <TextView
         android:id="@+id/office_location"
@@ -94,32 +114,35 @@
         android:id="@+id/page_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/page_number_placeholder"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
-
-    <Button
-        android:id="@+id/last_image"
-        style="@style/Widget.AppCompat.Light.ActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/rep_images"
-        android:layout_alignStart="@+id/rep_images"
-        android:text="@string/button_last_image"
-        android:layout_centerVertical="true"
-        android:textSize="80dp"/>
+        android:layout_alignParentTop="true"
+        android:text="@string/page_number_placeholder"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <Button
         android:id="@+id/next_image"
-        style="@style/Widget.AppCompat.Light.ActionButton"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rep_images"
-        android:layout_alignRight="@+id/rep_images"
-        android:text="@string/button_next_image"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:textSize="80dp"/>
+        android:text="@string/button_next_image"
+        android:textSize="50sp"/>
+
+    <Button
+        android:id="@+id/last_image"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:text="@string/button_last_image"
+        android:textSize="50sp"/>
 
 </RelativeLayout>

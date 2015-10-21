@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             implements
             View.OnClickListener,
             EditText.OnEditorActionListener,
-            RepJsonGrabListener {
+            AsyncRepJsonGrab.RepJsonGrabListener {
 
         // Name to be used with reflection to get appropriate xml resource.
         private String fragSufx;
@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        // TODO: check for and mitigate memory leak possibilities due to strong referencing.
         @Override
         public void onRepJsonGrabComplete(Representative[] reps) {
             // Start result activity

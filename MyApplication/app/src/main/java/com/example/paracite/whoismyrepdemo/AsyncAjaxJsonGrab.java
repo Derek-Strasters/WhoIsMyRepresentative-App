@@ -53,12 +53,12 @@ public class AsyncAjaxJsonGrab extends AsyncTask<String, Void, JSONObject> {
             Log.d(" String to URL ERROR", e.getLocalizedMessage());
         }
 
-        int retrys = 0;
+        int retry = 0;
         int statusCode = 0;
 
         try {
             do {
-                retrys++;
+                retry++;
                 if (ajaxUrl != null) {
                     //FIXME: rmnxtln
                     /*URL test = new URL("https://ajax.googleapis.com/ajax/services/search/images?" +
@@ -88,7 +88,7 @@ public class AsyncAjaxJsonGrab extends AsyncTask<String, Void, JSONObject> {
                     Log.d("Ajax json pull ERROR", "URL is null!");
                 }
 
-            } while (statusCode != 200 && retrys < 2);
+            } while (statusCode != 200 && retry < 2);
         } catch (Exception e) {
             //FIXME: hardcoded string
             Log.d(" URLConnection ERROR", e.getLocalizedMessage());
@@ -123,9 +123,9 @@ public class AsyncAjaxJsonGrab extends AsyncTask<String, Void, JSONObject> {
     public String getLocalIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
+                NetworkInterface networkInterface = en.nextElement();
+                for (Enumeration<InetAddress> enumInetAddresses = networkInterface.getInetAddresses(); enumInetAddresses.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumInetAddresses.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
                         return inetAddress.getHostAddress();
                     }
@@ -137,5 +137,12 @@ public class AsyncAjaxJsonGrab extends AsyncTask<String, Void, JSONObject> {
         return null;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Listener Interface
+    ///////////////////////////////////////////////////////////////////////////
+
+    public interface AjaxJsonGrabListener {
+        public void onAjaxJsonGrabComplete(String[] urls);
+    }
 }
 

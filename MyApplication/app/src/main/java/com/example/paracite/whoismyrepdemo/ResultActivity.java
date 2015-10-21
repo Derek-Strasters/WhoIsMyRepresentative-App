@@ -1,5 +1,7 @@
 package com.example.paracite.whoismyrepdemo;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,13 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
@@ -64,6 +62,8 @@ public class ResultActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -90,7 +90,7 @@ public class ResultActivity extends AppCompatActivity {
     // This fragment returns data on both representatives and senators by zip code.
     public static class RepInfoPage extends Fragment implements
             View.OnClickListener,
-            AjaxJsonGrabListener {
+            AsyncAjaxJsonGrab.AjaxJsonGrabListener {
 
         private View view;
 
@@ -106,8 +106,15 @@ public class ResultActivity extends AppCompatActivity {
         private Button buttNextImg;
         private Button buttLastImg;
 
-        ViewFlipper flipper;
-        ImageView[] flipperViews;
+        private RepImageFlipper flipper;
+        private ImageURLAdapter urlAdapter;
+        private ImageView placeHolder;
+        //FIXME: delete the below if needed.
+        private boolean isPlaceHolderAChild;
+        AnimatorSet inLeftSet;
+        AnimatorSet outLeftSet;
+        AnimatorSet inRightSet;
+        AnimatorSet outRightSet;
 
         private int repNumber;
         private int repTotal;
@@ -160,15 +167,14 @@ public class ResultActivity extends AppCompatActivity {
             textViewDstr = (TextView) view.findViewById(R.id.district);
             textViewOfficeLoc = (TextView) view.findViewById(R.id.office_location);
             textViewPageNumber = (TextView) view.findViewById(R.id.page_number);
-            flipper = (ViewFlipper) view.findViewById(R.id.rep_images);
+            flipper = (RepImageFlipper) view.findViewById(R.id.rep_image_flipper);
 
             // Set the onclick listeners for the buttons.
             buttExit.setOnClickListener(this);
             buttWeb.setOnClickListener(this);
             buttCall.setOnClickListener(this);
 
-            // Image next and last button ClickListeners are set later, upon a successful JSON grab in the callback.
-            // They are made invisible until that time.
+            // Image next and last button ClickListeners are set and made visible when the images are available.
             buttNextImg.setVisibility(View.INVISIBLE);
             buttLastImg.setVisibility(View.INVISIBLE);
 
@@ -177,16 +183,10 @@ public class ResultActivity extends AppCompatActivity {
             textViewStateName.setText(rep.getState());
             // Set text to diplay "District" if district string length is small implying number otherwise "Position".
             //TODO: make a real check for a number value.
-            textViewDstr.setText(((rep.getDstr().length() <= 2) ? "District " : "Postion ").concat(rep.getDstr()));
+            textViewDstr.setText(((rep.getDstr().length() <= 2) ? "District " : "Position ").concat(rep.getDstr()));
             textViewOfficeLoc.setText(rep.getOffice());
             // Set page numbering text
             textViewPageNumber.setText(String.valueOf(repNumber).concat(" of ").concat(String.valueOf(repTotal)));
-
-            // Setup animations for imageSwitcher
-            flipper.setInAnimation(AnimationUtils.loadAnimation(
-                    this.getContext(), android.R.anim.slide_in_left));
-            flipper.setOutAnimation(AnimationUtils.loadAnimation(
-                    this.getContext(), android.R.anim.slide_out_right));
 
             // Set color of background based on party
             if (rep.getParty().equals("D"))
@@ -194,12 +194,32 @@ public class ResultActivity extends AppCompatActivity {
             else if (rep.getParty().equals("R"))
                 view.setBackgroundColor(ContextCompat.getColor(this.getContext(), R.color.darkred));
             else
-                view.setBackgroundColor(ContextCompat.getColor(this.getContext(), R.color.purple));
+                view.setBackgroundColor(ContextCompat.getColor(this.getContext(), R.color.white));
 
             view.getBackground().setAlpha(85);
 
-            //TODO: Start pulling Ajax photos.
             new AsyncAjaxJsonGrab(this).execute(rep.getName());
+
+            // Load animations
+            inLeftSet = (AnimatorSet) AnimatorInflater.loadAnimator(
+                    this.getContext(),
+                    R.animator.card_flip_left_in);
+            outLeftSet = (AnimatorSet) AnimatorInflater.loadAnimator(
+                    this.getContext(),
+                    R.animator.card_flip_left_out);
+            inRightSet = (AnimatorSet) AnimatorInflater.loadAnimator(
+                    this.getContext(),
+                    R.animator.card_flip_right_in);
+            outRightSet = (AnimatorSet) AnimatorInflater.loadAnimator(
+                    this.getContext(),
+                    R.animator.card_flip_right_out);
+
+            flipper.setAnimators(
+                    R.animator.card_flip_left_out,
+                    R.animator.card_flip_left_in,
+                    R.animator.card_flip_right_out,
+                    R.animator.card_flip_right_in);
+
 
             return view;
         }
@@ -207,7 +227,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         public void onDestroy() {
             super.onDestroy();
-
+            // TODO: evaluate need for Bitmap recycling (How does Picasso handle such?)
         }
 
         @Override
@@ -222,6 +242,7 @@ public class ResultActivity extends AppCompatActivity {
                 // Call button will start the dialer activity with the representatives number ready to dial.
                 case (R.id.call_button):
                     // TODO: Check for error and throw message instead of unexplained crash
+                    // TODO: Add local popup with number displayed on hover
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
                     callIntent.setData(Uri.parse("tel:".concat(rep.getPhone())));
                     startActivity(callIntent);
@@ -229,49 +250,42 @@ public class ResultActivity extends AppCompatActivity {
 
                 // Web button will start default browser activity on the representatives URL.
                 case (R.id.web_button):
-                    // TODO: add popup to notify of bad web page.
+                    // TODO: add popup to notify of bad web page
+                    // TODO: Add local popup with URL displayed on hover
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(rep.getLink()));
                     startActivity(browserIntent);
                     break;
 
                 //TODO: Show next/last image if loaded.
+                // Setup animations for the flipper going one way on next button.
                 case (R.id.next_image):
                     flipper.showNext();
                     break;
 
+                // Setup animations for the flipper going the opposite way on previous button.
                 case (R.id.last_image):
                     flipper.showPrevious();
                     break;
             }
         }
 
+        // TODO: check for and mitigate memory leak possibilities due to strong referencing.
         @Override
         public void onAjaxJsonGrabComplete(String[] urls) {
+            flipper.loadURLs(urls);
+
+
 
             // Set click listeners for the image navigation buttons.
+            // TODO: move to when first two images are ready.
             buttNextImg.setOnClickListener(this);
             buttLastImg.setOnClickListener(this);
-
-            // Show the image navigation buttons.
             buttNextImg.setVisibility(View.VISIBLE);
             buttLastImg.setVisibility(View.VISIBLE);
 
-            flipperViews = new ImageView[urls.length];
-
-            for (int i=0; i<urls.length; i++) {
-                flipperViews[i] = new ImageView(this.getContext());
-                flipper.addView(flipperViews[i]);
-                //TODO: Do away with picasso, it is seeming at this point easier to just code the bitmap code tools.
-                Picasso.with(this.getContext())
-                        .load(urls[i])
-                        .placeholder(R.drawable.us_seal)
-                        .fit()
-                        .centerInside()
-                        .into(flipperViews[i]);
-            }
-
-            flipper.startFlipping();
+            //flipper.startFlipping(); //TODO: Related to flickering issue?
         }
+
     }
 
     ///////////////////////////////////////////////////////////////////////////

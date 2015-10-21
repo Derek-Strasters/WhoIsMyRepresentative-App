@@ -33,6 +33,8 @@ public class AsyncRepJsonGrab extends AsyncTask<URL, Void, JSONObject> {
         super.onPreExecute();
         progressDialog.setTitle(Con.Dlg.TITLE);
         progressDialog.setMessage(Con.Dlg.MSG);
+        progressDialog.setCanceledOnTouchOutside(false);
+        //TODO: handle any other cancel conditions.
         progressDialog.show();
     }
 
@@ -121,5 +123,12 @@ public class AsyncRepJsonGrab extends AsyncTask<URL, Void, JSONObject> {
         //TODO: Attempt retry's first, depending on the nature of the code.
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Listener Interface
+    ///////////////////////////////////////////////////////////////////////////
+
+    public interface RepJsonGrabListener {
+        public void onRepJsonGrabComplete(Representative[] reps);
+    }
 }
 
