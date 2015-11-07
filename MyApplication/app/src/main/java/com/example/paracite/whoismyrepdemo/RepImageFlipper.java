@@ -130,7 +130,7 @@ public class RepImageFlipper extends View {
 
         position++;
 
-        // TODO: need to tun flipping flag off
+        // TODO: need to turn flipping flag off
     }
 
     public void showPrevious() {
