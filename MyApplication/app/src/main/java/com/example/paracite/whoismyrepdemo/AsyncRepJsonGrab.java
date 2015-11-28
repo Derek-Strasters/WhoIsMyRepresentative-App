@@ -75,8 +75,6 @@ public class AsyncRepJsonGrab extends AsyncTask<URL, Void, JSONObject> {
                     inputStream = new BufferedInputStream(urlConnection.getInputStream());
                     jData = JsonUtilities.convertInputStreamToString(inputStream);
                     inputStream.close();
-
-                    break;
                 } else {
                     //TODO: Instantiate popup dialogue to inform user of connectivity problem
                 }

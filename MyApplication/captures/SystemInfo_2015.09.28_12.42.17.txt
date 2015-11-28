@@ -1,0 +1,35 @@
+Applications Memory Usage (kB):
+Uptime: 58526243 Realtime: 158848645
+
+** MEMINFO in pid 15485 [com.example.paracite.whoismyrepdemo] **
+                   Pss  Private  Private  Swapped     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------
+  Native Heap        0        0        0        0    16272    16272    20591
+  Dalvik Heap    34889    34708        0    14136    58065    49958     8107
+ Dalvik Other       52       52        0        0                           
+        Stack      286      284        0        0                           
+    Other dev    23833    23048        4        0                           
+     .so mmap     1106      340      136     1428                           
+    .apk mmap      157        0        0        0                           
+    .ttf mmap       25        0        0        0                           
+    .dex mmap     1340        0     1340        0                           
+    code mmap     1266        0      204        0                           
+   image mmap     1163      744       36      812                           
+   Other mmap       19        4        0        0                           
+           GL    27544    27544        0        0                           
+      Unknown    12996    12920        4     2812                           
+        TOTAL   104676    99644     1724    19188    74337    66230    28698
+ 
+ Objects
+               Views:       87         ViewRootImpl:        2
+         AppContexts:        4           Activities:        2
+              Assets:        3        AssetManagers:        3
+       Local Binders:       12        Proxy Binders:       19
+    Death Recipients:        0
+     OpenSSL Sockets:        1
+ 
+ SQL
+         MEMORY_USED:        0
+  PAGECACHE_OVERFLOW:        0          MALLOC_SIZE:        0
+ 

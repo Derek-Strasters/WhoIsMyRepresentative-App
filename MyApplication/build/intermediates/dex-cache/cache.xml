@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-070fc5608fec6bbc8960998638eb18bd26d5aef8.jar" />
+    </item>
+    <item
+        jar="/home/thehuman/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-urlconnection/2.2.0/cb20062e14c523637b7643295418097b48cccec2/okhttp-urlconnection-2.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="cb20062e14c523637b7643295418097b48cccec2">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.2.0-e0b1d1877fd39cf26db7011082e6b682278e89fe.jar" />
+    </item>
+    <item
+        jar="/home/thehuman/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.3.2/d6b7f0093cec6c9faf65dbfd6a6a345d0ed25e27/picasso-2.3.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d6b7f0093cec6c9faf65dbfd6a6a345d0ed25e27">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/picasso-2.3.2-34b2a05fcdea3709985ed83e4e252dcd07517648.jar" />
+    </item>
+    <item
+        jar="/home/thehuman/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.2.0/c0b52915a48fa91b1b94a28d4a2997bac5f524df/okio-1.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c0b52915a48fa91b1b94a28d4a2997bac5f524df">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/okio-1.2.0-3cedf68661293c7b0651c6d5614e4e5f8ebcb947.jar" />
+    </item>
+    <item
+        jar="/home/thehuman/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.2.0/959c454243581fdf730abfd4f4745441724bcf2c/okhttp-2.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="959c454243581fdf730abfd4f4745441724bcf2c">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/okhttp-2.2.0-4885ad935a73a8ee413fc919d04c0150a568e151.jar" />
+    </item>
+    <item
+        jar="/home/thehuman/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-7974224a191161fb11be9985e0cf2b501a578c4c.jar" />
+    </item>
+    <item
+        jar="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/classes-ef0775f169b00b7bc44bcaa2c434a9a005d3e63c.jar" />
+    </item>
+    <item
+        jar="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/home/thehuman/Code Repos/WhoIsMyRepresentative-App/MyApplication/app/build/intermediates/pre-dexed/debug/classes-51a019c5f4d13eb0247273eba965303f760f1dcf.jar" />
+    </item>
+
+</items>
